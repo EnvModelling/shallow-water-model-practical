@@ -2,6 +2,12 @@
 # a shallow water model. It should be called only after shallow_water_model
 # has been run.
 
+import os
+import getpass
+import matplotlib
+matplotlib.use('Agg')
+#matplotlib.use('GTK3Agg')
+
 import matplotlib.pyplot as plt
 from matplotlib import rc
 rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
@@ -29,7 +35,8 @@ ncol=64;
 interval = 6;
 
 # Set this to "True" to save each frame as a png file
-plot_frames = False;
+plot_frames = True;
+username=getpass.getuser()
 
 # Decide whether to show height in metres or km
 if np.mean(plot_height_range) > 1000:
@@ -117,6 +124,11 @@ for it in range(0,noutput):
    # To make an animation we can save the frames as a 
    # sequence of images
    if plot_frames:
-      plt.savefig('frame%03d.png' % it,format='png') 
-
-   plt.pause(0.05)
+      if not os.path.exists('/tmp/' + username):
+         os.mkdir('/tmp/' + username)
+      if it==0:
+         os.system('rm /tmp/' + username + '/*')
+      plt.savefig('/tmp/' +username + '/frame%03d.png' % it,format='png') 
+os.system('convert -delay 20 /tmp/'  + username +'/frame*.png /tmp/' +username + '/animation.gif')
+#os.system('rm /tmp/' + username + '/frame*.png')
+#plt.pause(0.05)

@@ -5,6 +5,7 @@
 import os
 import getpass
 import matplotlib
+import sys
 matplotlib.use('Agg')
 #matplotlib.use('GTK3Agg')
 
@@ -37,6 +38,11 @@ interval = 6;
 # Set this to "True" to save each frame as a png file
 plot_frames = True;
 username=getpass.getuser()
+
+
+
+if len(sys.argv)>1:
+    noutput=int(sys.argv[1])
 
 # Decide whether to show height in metres or km
 if np.mean(plot_height_range) > 1000:
@@ -130,5 +136,5 @@ for it in range(0,noutput):
          os.system('rm /tmp/' + username + '/*')
       plt.savefig('/tmp/' +username + '/frame%03d.png' % it,format='png') 
 os.system('convert -delay 20 /tmp/'  + username +'/frame*.png /tmp/' +username + '/animation.gif')
-#os.system('rm /tmp/' + username + '/frame*.png')
+os.system('rm /tmp/' + username + '/frame*.png')
 #plt.pause(0.05)
